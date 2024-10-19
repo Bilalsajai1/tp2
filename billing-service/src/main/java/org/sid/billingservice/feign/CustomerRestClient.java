@@ -9,5 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @FeignClient(name = "CUSTOMER-SERVICE")
 public interface CustomerRestClient {
     @GetMapping(path = "/customers/{id}")
-    Customer getCustomerById(@PathVariable(name = "id") long id);
+    Customer getCustomerById(@PathVariable(name = "id") Long id);
 }
+

@@ -3,7 +3,7 @@ package org.sid.billingservice;
 import org.sid.billingservice.entities.Bill;
 import org.sid.billingservice.entities.ProductItem;
 import org.sid.billingservice.feign.CustomerRestClient;
-import org.sid.billingservice.feign.ProductItemRestClient;
+import org.sid.billingservice.feign.ProductRestClient;
 import org.sid.billingservice.model.Customer;
 import org.sid.billingservice.model.Product;
 import org.sid.billingservice.repositories.BillRepository;
@@ -16,7 +16,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.hateoas.PagedModel;
 
 import java.util.Date;
-import java.util.Random;
 
 @SpringBootApplication
 @EnableFeignClients
@@ -26,25 +25,24 @@ public class BillingServiceApplication {
         SpringApplication.run(BillingServiceApplication.class, args);
     }
     @Bean
-    CommandLineRunner start(
-            BillRepository BillRepository,
-            ProductItemRepository ProductItemRepository,
-            CustomerRestClient CustomerRestClient,
-            ProductItemRestClient ProductItemRestClient,
-            BillRepository billRepository, ProductItemRepository productItemRepository){
+    CommandLineRunner start(BillRepository billRepository,
+                            ProductItemRepository productItemRepository,
+                            CustomerRestClient customerRestClient,
+                            ProductRestClient productItemRestClient){
         return args -> {
-            Customer customer =CustomerRestClient.getCustomerById(1L);
-           Bill bill = billRepository.save(new Bill(null,new Date(),null,customer.getId(),null));
-            PagedModel<Product> productPagedModel = ProductItemRestClient.pageProducts(0, 10);
-            productPagedModel.forEach(p ->{
+            Customer customer = customerRestClient.getCustomerById(1L);
+            PagedModel<Product> productPagedModel = productItemRestClient.pageProducts(0,0);
+            Bill bill = billRepository.save(new Bill(null, new Date(), customer.getId(), null, null));
+
+            productPagedModel.forEach(p->{
+
                 ProductItem productItem = new ProductItem();
+                productItem.setProductId(p.getId());
                 productItem.setPrice(p.getPrice());
-                productItem.setQuantity(1+new Random().nextInt(100));
+                productItem.setQuantity((int)(1+Math.random()*100));
                 productItem.setBill(bill);
                 productItemRepository.save(productItem);
             });
-
-
         };
     }
 

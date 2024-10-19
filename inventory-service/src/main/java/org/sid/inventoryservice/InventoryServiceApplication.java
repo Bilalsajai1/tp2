@@ -15,15 +15,13 @@ public class InventoryServiceApplication {
         SpringApplication.run(InventoryServiceApplication.class, args);
     }
     @Bean
-    CommandLineRunner start(ProductRepository productRepository, RepositoryRestConfiguration respositoryRestConfiguration) {
+    CommandLineRunner start(ProductRepository productRepository, RepositoryRestConfiguration restConfiguration) {
+        restConfiguration.exposeIdsFor(Product.class);
         return args -> {
-            respositoryRestConfiguration.exposeIdsFor(Product.class);
             productRepository.save(new Product(null,"Ordinateur", 788,12));
             productRepository.save(new Product(null,"Imprimente", 88,129));
             productRepository.save(new Product(null,"Smartphone", 1288,112));
-            productRepository.findAll().forEach(p->{
-                System.out.println(p.getName());
-            });
+            productRepository.findAll().forEach(p-> System.out.println(p.toString()));
         };
     }
 

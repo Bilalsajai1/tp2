@@ -21,14 +21,12 @@ public class GatewayApplication {
                 .route(r->r.path("/customers/**").uri("lb://CUSTOMER-SERVICE"))
                 .route(r->r.path("/products/**").uri("lb://INVENTORY-SERVICE"))
                 .build();
-
     }
-    //La configuration dynamique
     @Bean
-    public DiscoveryClientRouteDefinitionLocator definitionLocator(
-            ReactiveDiscoveryClient rdc,
-            DiscoveryLocatorProperties properties){
-        return new DiscoveryClientRouteDefinitionLocator(rdc,properties);
+    DiscoveryClientRouteDefinitionLocator definitionLocator(ReactiveDiscoveryClient rdc,
+                                                            DiscoveryLocatorProperties properties){
+        return new DiscoveryClientRouteDefinitionLocator(rdc, properties);
     }
 
 }
+

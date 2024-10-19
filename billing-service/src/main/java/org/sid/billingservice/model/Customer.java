@@ -1,8 +1,9 @@
 package org.sid.billingservice.model;
 
 import lombok.Data;
+import lombok.ToString;
 
-@Data
+@Data @ToString
 public class Customer {
     private Long id;
     private String name;

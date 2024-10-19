@@ -14,17 +14,15 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+
 public class Bill {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
-    private Date billDate;
+    private Date billingDate;
+    private Long customerId;
     @OneToMany(mappedBy="bill")
     private Collection<ProductItem> productItems;
-    private Long customerId;
-    //ceci n'est pas une entite JPA
     @Transient
-    //l'attribut est dans la classe ms n'est pas represente dans la base de donnees,cad ignore par jpa
     private Customer customer;
 }
